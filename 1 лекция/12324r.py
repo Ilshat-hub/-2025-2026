@@ -1,0 +1,1 @@
+settings = open_plugin_settings('plugin_manager')
