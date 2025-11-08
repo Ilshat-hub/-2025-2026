@@ -17,11 +17,56 @@
 Добавить оценку
 Показать всех студентов со средними баллами
  •  • Показать статистику"""
-students = {
-    "иван": [4, 5, 3],
-    "мария": [5, 5, 4],
-    "петр": [3, 4, 3]
+shkola = {
+    "Саша": [3, 4, 5],
+    "Мария": [5, 5, 4],
+    "Петр": [3, 4, 3]
 }
+def dop_st():
+    name = input('Имя студента ').strip().capitalize()
+    if name.capitalize() in shkola:
+        print('Такой уже есть...')
+    else:
+        oc = input('Запишите оценки через запятую ').strip()
+        oc_lit = [ocn.strip() for ocn in oc.split(',')]
+        new_lst = []
+        for item in oc_lit:
+            new_lst.append(int(item))
+        shkola[name] = new_lst
+def dop_ocenka():
+    imya = input('Назовите имя студента ').strip().lower()
+    if imya.capitalize() not in shkola:
+        print('Такого нету')
+        return
+    else:
+        dop_oc = input('Введите оценку(и) через запятую которые, хотите доббавить ')
+        dop_oc1 = []
+        for o in dop_oc.split(','):
+            dop_oc1.append(int(o))
+        shkola[imya.capitalize()].extend(dop_oc1)
+
+def vse_st():
+    for name, oc in shkola.items():
+        if oc:
+            grades = sum(oc) / len(oc)
+            print(f'{name}: оценки {oc}, средний {grades:.2f}')
+        else:
+            print('Оценек нету')
+def stata():
+    slov = {}
+    for name, oc in shkola.items():
+        if oc:
+            grades = sum(oc) / len(oc)
+            slov[name] = grades
+            print(f'{name}: оценки {oc}, средний {grades:.2f}')
+        else:
+            print('Оценек нету')
+    otl = sum(1 for sl in slov.values() if sl >= 4.5)
+    print(f'Всего отличников {otl}!')
+    luch = max(slov, key=slov.get)
+    huch = min(slov, key=slov.get)
+    print(f'Лучший студент это - {luch}!')
+    print(f'Худший студент это - {huch}!')
 
 while True:
     print("\n1. Добавить студента")
@@ -30,68 +75,16 @@ while True:
     print("4. Статистика")
     print("5. Выход")
 
-    choice = input("Выберите: ")
+    vibpr = input('Выберите функцию ')
 
-    if choice == "1":
-        name = input("Имя студента: ").lower()
-        if name in students:
-            print("Студент уже есть!")
-        else:
-            students[name] = []
-            print(f"Студент {name} добавлен!")
-
-    elif choice == "2":
-        name = input("Имя студента: ").lower()
-        if name not in students:
-            print("Студент не найден!")
-        else:
-            grade = int(input("Оценка (2-5): "))
-            if 2 <= grade <= 5:
-                students[name].append(grade)
-                print(f"Оценка {grade} добавлена!")
-            else:
-                print("Оценка должна быть от 2 до 5!")
-
-    elif choice == "3":
-        print("\nВсе студенты:")
-        for name, grades in students.items():
-            if grades:
-                avg = sum(grades) / len(grades)
-                print(f"- {name}: {grades} (средний: {avg:.1f})")
-            else:
-                print(f"- {name}: нет оценок")
-
-    elif choice == "4":
-        if not students:
-            print("Нет студентов!")
-            continue
-
-        # Средние баллы
-        avg_grades = {}
-        for name, grades in students.items():
-            if grades:
-                avg_grades[name] = sum(grades) / len(grades)
-
-        if avg_grades:
-            # Лучший и худший
-            best = max(avg_grades, key=avg_grades.get)
-            worst = min(avg_grades, key=avg_grades.get)
-
-            # Отличники
-            excellent = [name for name, avg in avg_grades.items() if avg >= 4.5]
-
-            print(f"\nСтатистика:")
-            print(f"Лучший студент: {best} ({avg_grades[best]:.1f})")
-            print(f"Худший студент: {worst} ({avg_grades[worst]:.1f})")
-            print(f"Отличников: {len(excellent)}")
-            if excellent:
-                print(f"Отличники: {', '.join(excellent)}")
-        else:
-            print("Нет оценок для статистики!")
-
-    elif choice == "5":
-        print("До свидания!")
+    if vibpr == '1':
+        dop_st()
+    elif vibpr == '2':
+        dop_ocenka()
+    elif vibpr == '3':
+        vse_st()
+    elif vibpr == '4':
+        stata()
+    elif vibpr == '5':
+        print('До свидания! До новых встреч')
         break
-
-    else:
-        print("Неверный выбор")
